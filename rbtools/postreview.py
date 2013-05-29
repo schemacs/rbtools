@@ -27,7 +27,7 @@ try:
     # installations containing incompatible modules named "json".
     from json import loads as json_loads
 except ImportError:
-    from simplejson import loads as json_loads
+    from simplejson import loads as json_loads  # NOQA
 
 
 options = None
@@ -56,7 +56,7 @@ class PresetHTTPAuthHandler(urllib2.BaseHandler):
 
     It will only do this once.
     """
-    handler_order = 480 # After Basic auth
+    handler_order = 480  # After Basic auth
 
     def __init__(self, url, password_mgr):
         self.url = url
@@ -1036,12 +1036,26 @@ def parse_options(args):
                       default=get_config_value(configs, 'TARGET_GROUPS'),
                       help="names of the groups who will perform "
                            "the review")
+    parser.add_option("--tg",
+                      dest="target_groups",
+                      default=get_config_value(configs, 'TARGET_GROUPS'),
+                      help="names of the groups who will perform "
+                           "the review")
+
     parser.add_option("--target-people",
                       dest="target_people",
                       default=get_config_value(configs, 'TARGET_PEOPLE'),
                       help="names of the people who will perform "
                            "the review")
-    parser.add_option("--summary",
+    parser.add_option("--tp",
+                      dest="target_people",
+                      default=get_config_value(configs, 'TARGET_PEOPLE'),
+                      help="names of the people who will perform "
+                           "the review")
+    parser.add_option('-m', "--summary",
+                      dest="summary", default=None,
+                      help="summary of the review ")
+    parser.add_option('-s',
                       dest="summary", default=None,
                       help="summary of the review ")
     parser.add_option("--description",
@@ -1156,6 +1170,10 @@ def parse_options(args):
                       default=get_config_value(configs, 'DEBUG', False),
                       help="display debug output")
     parser.add_option("--diff-filename",
+                      dest="diff_filename", default=None,
+                      help='upload an existing diff file, instead of '
+                           'generating a new diff')
+    parser.add_option("--df",
                       dest="diff_filename", default=None,
                       help='upload an existing diff file, instead of '
                            'generating a new diff')
